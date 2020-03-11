@@ -21,7 +21,7 @@
     "react-scripts": "^3.4.0"
   },
   "scripts": {
-    "start": "concurrently \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"react-scripts start\" ",
+    "start": "concurrently \"nodemon server.js --exec babel-node --presets babel-preset-env\"  ",
     "dev": " \"set HTTPS=true&& react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"mongod\" ",
     "herokuDev" : "set HTTPS=true&& heroku local -p 3000",
     "server" : "node server",
