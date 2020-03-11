@@ -36,10 +36,10 @@ import path from 'path'
             res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With')
             next()
         })
-        // app.use(express.static(path.join(__dirname, 'build')))
-        // app.get('*', function (req, res) {
-        //     res.sendFile(path.join(__dirname, 'build', 'index.html'))
-        // })
+        app.use(express.static(path.join(__dirname, 'build')))
+        app.get('*', function (req, res) {
+            res.sendFile(path.join(__dirname, 'build', 'index.html'))
+        })
         app.use('/', router)
         app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`))
     }
