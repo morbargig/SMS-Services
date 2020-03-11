@@ -15,6 +15,7 @@
     "firebase": "^7.10.0",
     "mongoose": "^5.9.3",
     "nexmo": "^2.6.0",
+    "nodemon": "^2.0.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-router-dom": "^5.1.2",
@@ -23,8 +24,8 @@
   "scripts": {
     "start": "concurrently \"nodemon server.js --exec babel-node --presets babel-preset-env\"  ",
     "dev": " \"set HTTPS=true&& react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"mongod\" ",
-    "herokuDev" : "set HTTPS=true&& heroku local -p 3000",
-    "server" : "node server",
+    "herokuDev": "set HTTPS=true&& heroku local -p 3000",
+    "server": "node server",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
