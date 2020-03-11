@@ -2,10 +2,16 @@
   "name": "sms-services",
   "version": "0.1.0",
   "private": true,
-
+  "engines": {
+    "node": "13.1.0"
+  },
   "dependencies": {
     "axios": "^0.19.2",
+    "babel-cli": "^6.26.0",
+    "babel-node": "0.0.1-security",
+    "babel-preset-env": "^1.7.0",
     "body-parser": "^1.19.0",
+    "concurrently": "^5.1.0",
     "firebase": "^7.10.0",
     "mongoose": "^5.9.3",
     "nexmo": "^2.6.0",
@@ -15,7 +21,9 @@
     "react-scripts": "^3.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": " react-scripts start",
+    "dev": "concurrently \"set HTTPS=true&& react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"mongod\" ",
+    "herokuDev" : "set HTTPS=true&& heroku local -p 3000",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

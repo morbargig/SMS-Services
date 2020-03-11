@@ -88,8 +88,11 @@ class User extends Component {
         this.setState({ user: user, userLogin: true });
     }
 
+
+
     render() {
         return <div>
+
             {this.state.userLogin ?
                 <div>
                     Welcome {this.state.user.displayName} <button onClick={() => firebase.auth().signOut()}> log out</button>

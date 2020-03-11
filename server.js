@@ -1,50 +1,46 @@
 
-const path = require('path')
-// const DBNAME = process.env.DBNAME
-// const PORT = process.env.PORT
-// Server setup
-const express = require('express')
-const app = express()
-const api = require('./server/routes/api')
+import 'dotenv/config'
+import express from 'express'
+import router from './server/routes/api'
+import mongoose from 'mongoose'
+import path from 'path'
 
-// Mongoose setup
-const mongoose = require('mongoose')
-// mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/SmallBizDB', { useNewUrlParser: true })
+(async () => {
+    const app = express()
+    const PORT = process.env.PORT || 3030
 
-//Cross origin
-app.use(function (req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*')
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With')
-    next()
-})
+    const DBname = "SMS-Services"
 
+    const MONGO_URL = process.env.MONGODB_URI || `mongodb://localhost/${DBname}`
 
-app.use(express.static(path.join(__dirname, 'build')))
+    const connection = await mongoose
+        .connect(MONGO_URL, {
+            useUnifiedTopology: true,
+            useNewUrlParser: true
+        })
+        .catch(err => console.error('Error connecting db:', err.message))
 
+    app.get('/health', (req, res) => res.json({ UP: !!connection }))
 
-app.use('/', api)
-
-
-app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
-})
-
-
-
-port = 8000
-DBname = 'SMS-Services'
-
-mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost/${DBname}`, {useUnifiedTopology: true, useNewUrlParser: true }).then(() => {
-    app.listen(process.env.PORT || port, () => console.log(`Running server on port ` + port))
-})
-
-
-
-
-// const routee = process.env.port
-
-// export default routee
-
-
-
+    if (!connection) {
+        app.use((req, res) => {
+            res.status(500)
+            res.json({ error: 'Server is unavailable at the moment' })
+            console.error('Server is unavailable at the moment')
+        })
+    } 
+    else {
+        app.use(function (req, res, next) {
+            res.header('Access-Control-Allow-Origin', '*')
+            res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+            res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With')
+            next()
+        })
+        // app.use(express.static(path.join(__dirname, 'build')))
+        // app.get('*', function (req, res) {
+        //     res.sendFile(path.join(__dirname, 'build', 'index.html'))
+        // })
+        app.use('/', router)
+        app.listen(PORT, () => console.log(`Server is listening on port ${PORT}`))
+    }
+})()

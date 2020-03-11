@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+import { Schema as _Schema, model } from 'mongoose'
+const Schema = _Schema
 
 const phoneNumberSchema = new Schema({
     _id : Number,
@@ -7,8 +7,8 @@ const phoneNumberSchema = new Schema({
     phoneNumber : Number
 })
 
-const phoneNumber = mongoose.model("phoneNumber", phoneNumberSchema)
-module.exports = phoneNumber
+const phoneNumber = model("phoneNumber", phoneNumberSchema)
+export default phoneNumber
 
 
 

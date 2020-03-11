@@ -1,26 +1,31 @@
 
-const express = require('express')
-const router = express.Router()
-const PhoneNumber = require('../models/phoneNumber')
+import { Router } from 'express'
+const router = Router()
+import PhoneNumber, { findOneAndDelete, remove, find } from '../models/phoneNumber'
 
 // const nodemailer = require('nodemailer');
 
-const bodyParser = require('body-parser')
+import { json, urlencoded } from 'body-parser'
 
-const sendMassege = require('../services/send')
+import sendMassege from '../services/send'
 
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
+router.use(json())
+router.use(urlencoded({ extended: false }))
 
 
 // deleteUser
+
+router.get('/test', function (req, res) {
+    res.send("work")
+    console.log("work")
+})
 
 router.delete('/deleteUser/:phoneNumber', (req, res) => {
     // new PhoneNumber({ name: 'morbargig', phoneNumber: '0528612379' }).save()
     let key = Object.keys(req.params)[0]
     let value = req.params[key]
     console.log(key, value)
-    PhoneNumber.findOneAndDelete({ [key]: value }, function (err, x) {
+    findOneAndDelete({ [key]: value }, function (err, x) {
         res.send(x)
     })
 })
@@ -39,7 +44,7 @@ router.post('/addnewusers', function (req, res) {
 
 router.post('/newUsersList', function (req, res) {
     console.log(req, "kgjdsnkjnkj", req.body, req.body.users)
-    PhoneNumber.remove({}, function(err, result){
+    remove({}, function(err, result){
         // handle the error if any
         if (err) throw err;
         console.log("Collection is deleted! "+ result);
@@ -51,7 +56,7 @@ router.post('/newUsersList', function (req, res) {
 
 
 router.get('/getUsers', function (req, res) {
-    PhoneNumber.find({}).exec(function (err, x) {
+    find({}).exec(function (err, x) {
         res.send(x)
     })
 })
@@ -62,7 +67,7 @@ router.post('/sendSms/:from/:to', function (req, res) {
     let text = req.body.text
     if (to === '1') {
         let to = []
-        PhoneNumber.find({}).exec(function (err, x) {
+        find({}).exec(function (err, x) {
             console.log(x)
             x.map(u => to.push('972' + u.phoneNumber) && console.log(u.phoneNumber))
             console.log(to)
@@ -74,8 +79,8 @@ router.post('/sendSms/:from/:to', function (req, res) {
 })
 
 
-router.use(bodyParser.json())
-router.use(bodyParser.urlencoded({ extended: false }))
+router.use(json())
+router.use(urlencoded({ extended: false }))
 
 
-module.exports = router
+export default router

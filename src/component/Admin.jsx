@@ -13,7 +13,6 @@ class Admin extends Component {
         }
     }
 
-
     componentDidMount = async () => {
         firebase.database().ref('users/sms_users/').on('value', (snap) => {
             // console.log(snap.val());
@@ -203,6 +202,18 @@ class Admin extends Component {
         } else { alert("invalid phone number please send agin") }
     }
 
+    // testRequest = () => {
+    //     axios.get(`${route}test`)
+    //         .then((response) => {
+    //             console.log(response.data);
+    //             console.log(response.status);
+    //             console.log(response.statusText);
+    //             console.log(response.headers);
+    //             console.log(response.config);
+    //         });
+    //     return <button onClick={this.testRequest}> click me</button>
+    // }
+
     render() {
         return <div>
             <div>
@@ -232,7 +243,7 @@ class Admin extends Component {
                             <h4> {this.state.broadcastList} users </h4>
                             {this.state.correnetUsers && this.state.showUsers ? <div> {this.state.correnetUsers.map(n => <li> {n[0] + ': 0' + n[1]}  </li>)}   </div> : null}
                             {this.state.listOfUsers ? <h4> to use "add new users" and "update users"
-                                you need to wirte you users like
+                            you need to wirte you users like
                              <br></br>   name , phoneNumber <br></br>
                                 and separate by new line
                             </h4> : null}
