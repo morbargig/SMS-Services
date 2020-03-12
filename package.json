@@ -22,9 +22,9 @@
     "react-scripts": "^3.4.0"
   },
   "scripts": {
-    "start": "concurrently \"nodemon server.js --exec babel-node --presets babel-preset-env\"  ",
-    "dev": " \"set HTTPS=true&& react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"mongod\" ",
-    "herokuDev": "set HTTPS=true&& heroku local -p 3000",
+    "start": "concurrently \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"set HTTPS=true&&react-scripts start\"",
+    "dev": "concurrently \"set HTTPS=true&&react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"mongod\" ",
+    "herokuDev": "concurrently \"set HTTPS=true&&react-scripts start\" \"heroku local -p 3030\" \"mongod\"",
     "server": "node server",
     "build": "react-scripts build",
     "test": "react-scripts test",

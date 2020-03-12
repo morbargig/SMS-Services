@@ -203,6 +203,7 @@ class Admin extends Component {
     }
 
     testRequest = () => {
+        console.log("work")
         axios.get(`${route}test`)
             .then((response) => {
                 console.log(response.data);
