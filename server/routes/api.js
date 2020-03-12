@@ -21,7 +21,7 @@ router.get('/test', function (req, res) {
 
 
 router.get('/isItOnline', (req, res) => {
-    res.send(process.env.PORT)
+    res.send("server is online")
     console.log("server is online")
 })
 
