@@ -16,14 +16,13 @@ router.use(urlencoded({ extended: false }))
 // deleteUser
 router.get('/test', function (req, res) {
     res.send("work")
-    res.send(process.env.PORT)
-    console.log(process.env.PORT,process.env.MONGODB_URI)
+    res.send("server is online")
 })
 
 
-router.get('/isItOnline', (req, res) =>  {
+router.get('/isItOnline', (req, res) => {
     res.send(process.env.PORT)
-    console.log(process.env.PORT)
+    console.log("server is online")
 })
 
 router.delete('/deleteUser/:phoneNumber', (req, res) => {
@@ -44,19 +43,19 @@ router.post('/addnewuser', function (req, res) {
 
 router.post('/addnewusers', function (req, res) {
     console.log(req, req.body.users)
-    req.body.users.map(r => new PhoneNumber({ phoneNumber: r , _id : r}).save())
+    req.body.users.map(r => new PhoneNumber({ phoneNumber: r, _id: r }).save())
     res.send('succes!')
 })
 
 router.post('/newUsersList', function (req, res) {
     console.log(req, "kgjdsnkjnkj", req.body, req.body.users)
-    remove({}, function(err, result){
+    remove({}, function (err, result) {
         // handle the error if any
         if (err) throw err;
-        console.log("Collection is deleted! "+ result);
+        console.log("Collection is deleted! " + result);
         // close the connection to db when you are done with it
     });
-    req.body.users.map(r => new PhoneNumber({ phoneNumber: r , _id : r }).save())
+    req.body.users.map(r => new PhoneNumber({ phoneNumber: r, _id: r }).save())
     res.send('succes!')
 })
 

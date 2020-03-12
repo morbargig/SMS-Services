@@ -6,7 +6,7 @@ function isonline(port) {
     xhr.open("GET", uri, false);
     xhr.send(null);
     console.log("route")
-    if (xhr.status == 200 && xhr.response > 0) {
+    if (xhr.status == 200 ) {
         return '/';
     }
     else {
