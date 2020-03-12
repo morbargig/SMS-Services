@@ -16,12 +16,14 @@ router.use(urlencoded({ extended: false }))
 // deleteUser
 router.get('/test', function (req, res) {
     res.send("work")
+    res.send(process.env.PORT)
+    console.log(process.env.PORT,process.env.MONGODB_URI)
 })
 
 
 router.get('/isItOnline', function (req, res) {
     res.send(process.env.PORT)
-    console.log(process.env.PORT)
+    console.log(process.env.PORT,process.env.MONGODB_URI)
 })
 
 router.delete('/deleteUser/:phoneNumber', (req, res) => {
