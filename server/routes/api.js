@@ -16,9 +16,7 @@ router.use(urlencoded({ extended: false }))
 // deleteUser
 router.get('/test', function (req, res) {
     res.send("work")
-    res.send("server is online")
 })
-
 
 router.get('/isItOnline', (req, res) => {
     res.send("server is online")

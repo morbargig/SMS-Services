@@ -62,7 +62,7 @@ class User extends Component {
         // let { displayName, uid, photoURL, email, phoneNumber } = this.state.user
         let { displayName, uid, photoURL, email, phoneNumber } = user
         let i = 0
-        while (phoneNumber == null || parseInt(phoneNumber) > 599999999 || parseInt(phoneNumber) < 500000000) {
+        while (phoneNumber === null || parseInt(phoneNumber) > 599999999 || parseInt(phoneNumber) < 500000000) {
             if (i > 0) {
                 phoneNumber = window.prompt("invalid phone number please try agin!")
 

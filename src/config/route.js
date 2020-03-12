@@ -3,11 +3,10 @@ let port = 3030
 function isonline(port) {
     var uri = `/isItOnline`
     var xhr = new XMLHttpRequest();
+    console.log(process.env.REACT_APP_PORT,process.env.PORT,process.env.NODE_ENV,process.env.REACT_APP_NOT_SECRET_CODE)
     xhr.open("GET", uri, false);
     xhr.send(null);
-    console.log("route")
-    console.log(xhr.status, xhr.response)
-    if (xhr.status == 200 && xhr.response == "server is online") {
+    if (xhr.status === 200 && xhr.response === "server is online") {
         return '/';
     }
     else {

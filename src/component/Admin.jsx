@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom'
 import axios from 'axios'
-import isItOnline from '../config/route'
+import route from '../config/route'
 import firebase from '../config/firebase'
+import { BroadcastList } from '../funcCmponent/BroadcastList';
 
 
 class Admin extends Component {
@@ -35,14 +36,14 @@ class Admin extends Component {
         let name = e.target.name
         let to = "972528612379"
         if (name === 'sendMassege') { to = 1 }
-        // await axios.post(`${route}sendSms/${from}/${to}`, {
-        //     text: this.state.text
-        // })
+        await axios.post(`${route}sendSms/${from}/${to}`, {
+            text: this.state.text
+        })
     }
 
     showUsers = () => {
         this.setState(prevState => ({
-            showUsers: !prevState.showUsers
+            isShowUsers: !prevState.isShowUsers
         }))
     }
 
@@ -106,7 +107,10 @@ class Admin extends Component {
     broadcastSearch = async (e) => {
         let broadcastList = e.target.value
         console.log(broadcastList)
-        window.document.getElementById("defaultSelect").remove();
+        let defaultSelect = window.document.getElementById("defaultSelect");
+        if (defaultSelect) {
+            defaultSelect.remove()
+        }
         let { uid } = this.props.state.user
         let data
 
@@ -202,22 +206,21 @@ class Admin extends Component {
         } else { alert("invalid phone number please send agin") }
     }
 
-    testRequest = () => {
-        console.log(isItOnline)
-        axios.get(`${isItOnline}test`)
-            .then((response) => {
-                console.log(response.data);
-                console.log(response.status);
-                console.log(response.statusText);
-                console.log(response.headers);
-                console.log(response.config);
-            });
-        return 
-    }
+    // testRequest = () => {
+    //     console.log(route)
+    //     axios.get(`${route}test`)
+    //         .then((response) => {
+    //             console.log(response.data);
+    //             console.log(response.status);
+    //             console.log(response.statusText);
+    //             console.log(response.headers);
+    //             console.log(response.config);
+    //         });
+    //     return <button onClick={this.testRequest}> click me</button>
+    // }
 
     render() {
         return <div>
-            <button onClick={this.testRequest}> click me</button>
             <div>
                 <br></br>
                 <div>create a new broadcast list <br></br>
@@ -231,33 +234,14 @@ class Admin extends Component {
                         this.state.broadcastLists.map(i => <option value={i} key={i}>{i} </option>)
                         : null}
                 </select>
-                {this.state.broadcastList ? <h4>you are in {this.state.broadcastList} Broadcast </h4> : null}
                 {this.state.broadcastList ?
-                    <div>
-                        <div>
-                            <h6> new user </h6>
-                            <input placeholder='name' name="name" type="text" value={this.state.name || ""} onChange={this.handleChange}  ></input>
-                            <input placeholder='number' name="number" type="number" value={this.state.number || ""} onChange={this.handleChange}  ></input>
-                            <br></br>
-                            <button onClick={this.addNumber}>Add new User</button>
-                        </div>
-                        <div>
-                            <h4> {this.state.broadcastList} users </h4>
-                            {this.state.correnetUsers && this.state.showUsers ? <div> {this.state.correnetUsers.map(n => <li> {n[0] + ': 0' + n[1]}  </li>)}   </div> : null}
-                            {this.state.listOfUsers ? <h4> to use "add new users" and "update users"
-                            you need to wirte you users like
-                             <br></br>   name , phoneNumber <br></br>
-                                and separate by new line
-                            </h4> : null}
-                            <textarea placeholder={this.state.correnetUsers ? this.state.correnetUsers.length + ' users: ' + this.state.correnetUsers.map(n => n[0] + ' 0' + n[1]) : "users"} name='listOfUsers' value={this.state.listOfUsers} rows="4" cols="50" onChange={this.handleChange}>
-
-                            </textarea>
-                            <button onClick={this.showUsers} >Show users </button>
-                            {this.state.listOfUsers ? <button name="addnewusers" onClick={() => this.addUsers(true)}>Add new users </button> : null}
-                            {this.state.listOfUsers ? <button name="newUsersList" onClick={() => this.addUsers(false)}>update users </button> : null}
-                        </div>
-                    </div>
+                    <BroadcastList state={this.state} This={this}  ></BroadcastList>
                     : null}
+
+
+                <input type="file"></input>
+
+
                 <h4>new massage </h4>
                 <textarea placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.updateInput}>
                 </textarea>

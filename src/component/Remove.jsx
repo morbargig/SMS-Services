@@ -10,7 +10,7 @@ class Remove extends Component {
             numberInput: 0,
         }
     }
-    
+
     updateInput = (e) => {
         // let value = e.target.value
         let newValue = parseInt(e.target.value)
@@ -56,27 +56,32 @@ class Remove extends Component {
         let broadcastList = this.state.removeList
         let data
         await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
-
             if (snap.val() !== null) {
                 data = snap.val()[broadcastList]
             }
         });
         let i = 0
-        while (data === null || data === undefined) {
-            broadcastList = prompt(`we are sorry invalid remove code \npleese enter new remove code`)
+        while ((data === null || data === undefined)) {
+            let newBroadcastList = prompt(`we are sorry invalid remove code \npleese enter new remove code`)
+            let saveReferences = false
             await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
-
-                if (snap.val() !== null) {
-                    data = snap.val()[broadcastList]
+                console.log(snap.val())
+                if (snap.val() !== null && snap.val()[newBroadcastList] !== undefined && snap.val()[newBroadcastList] !== null) {
+                    saveReferences = true
+                    return
                 }
             });
-            if (i >= 3) {
-                alert("we are soory something want wrong")
+            if (saveReferences) {
+                broadcastList = newBroadcastList
                 break
+            }
+            if (i >= 3) {
+                alert("we are sorry invalid remove code")
+                return
             }
             i++
         }
-        this.setState(prevState => ({ virefyBroadcastList: !prevState.virefyBroadcastList }))
+        this.setState(prevState => ({ virefyBroadcastList: !prevState.virefyBroadcastList, removeList: broadcastList }))
     }
 
     render() {
