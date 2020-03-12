@@ -1,7 +1,7 @@
 
 let port = 3030
 function isonline(port) {
-    var uri = `http://localhost:${port}/isItOnline`
+    var uri = `/isItOnline`
     var xhr = new XMLHttpRequest();
     xhr.open("GET", uri, false);
     xhr.send(null);
