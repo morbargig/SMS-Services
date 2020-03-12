@@ -1,8 +1,18 @@
+import axios from 'axios'
 
-    const route = 'http://localhost:3030/'
-if (process.env.PORT) {
+isItOnline = () => {
     const route = '/'
+    axios.get(`${route}isItOnline`)
+        .then((response) => {
+            console.log(response.data);
+        });
 }
-alert(route)
+
+
+// const route = 'http://localhost:3030/'
+// if (process.env.PORT) {
+// }
+// alert(route,process.env.PORT)
+
 
 export default route
