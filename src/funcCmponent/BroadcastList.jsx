@@ -6,6 +6,7 @@ export const BroadcastList = ({ This, state }) => {
     let { name, number, broadcastList, correnetUsers, listOfUsers, isShowUsers } = state
     return (
         <div>
+            
             <h4>you are in {broadcastList} Broadcast </h4>
             <div>
                 <h6> new user </h6>
