@@ -21,6 +21,7 @@ router.get('/test', function (req, res) {
 
 router.get('/isItOnline', function (req, res) {
     res.send(process.env.PORT)
+    console.log(process.env.PORT)
 })
 
 router.delete('/deleteUser/:phoneNumber', (req, res) => {
