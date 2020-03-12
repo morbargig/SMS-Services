@@ -1,7 +1,6 @@
 import axios from 'axios'
 
 const route = function () {
-    let url
     axios.get(`/isItOnline`)
         .then((response) => {
             console.log(response.data, "data");
@@ -12,4 +11,4 @@ const route = function () {
     return 'http://localhost:3030/'
 }
 
-export default route()
+export default route
