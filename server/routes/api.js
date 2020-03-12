@@ -21,9 +21,9 @@ router.get('/test', function (req, res) {
 })
 
 
-router.get('/isItOnline', function (req, res) {
+router.get('/isItOnline', (req, res) =>  {
     res.send(process.env.PORT)
-    console.log(process.env.PORT,process.env.MONGODB_URI)
+    console.log(process.env.PORT)
 })
 
 router.delete('/deleteUser/:phoneNumber', (req, res) => {

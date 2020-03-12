@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom'
 import axios from 'axios'
-import route from '../config/route'
+import isItOnline from '../config/route'
 import firebase from '../config/firebase'
 
 
@@ -35,9 +35,9 @@ class Admin extends Component {
         let name = e.target.name
         let to = "972528612379"
         if (name === 'sendMassege') { to = 1 }
-        await axios.post(`${route}sendSms/${from}/${to}`, {
-            text: this.state.text
-        })
+        // await axios.post(`${route}sendSms/${from}/${to}`, {
+        //     text: this.state.text
+        // })
     }
 
     showUsers = () => {
@@ -203,8 +203,8 @@ class Admin extends Component {
     }
 
     testRequest = () => {
-        console.log(route)
-        axios.get(`${route}test`)
+        console.log(isItOnline)
+        axios.get(`${isItOnline}test`)
             .then((response) => {
                 console.log(response.data);
                 console.log(response.status);
