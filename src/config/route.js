@@ -1,11 +1,12 @@
 import axios from 'axios'
 
-isItOnline = () => {
+route = () => {
     const route = '/'
     axios.get(`${route}isItOnline`)
         .then((response) => {
             console.log(response.data);
         });
+    return route
 }
 
 
@@ -15,4 +16,4 @@ isItOnline = () => {
 // alert(route,process.env.PORT)
 
 
-export default route
+export default route()
