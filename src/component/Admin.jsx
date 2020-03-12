@@ -206,21 +206,24 @@ class Admin extends Component {
         } else { alert("invalid phone number please send agin") }
     }
 
-    // testRequest = () => {
-    //     console.log(route)
-    //     axios.get(`${route}test`)
-    //         .then((response) => {
-    //             console.log(response.data);
-    //             console.log(response.status);
-    //             console.log(response.statusText);
-    //             console.log(response.headers);
-    //             console.log(response.config);
-    //         });
-    //     return <button onClick={this.testRequest}> click me</button>
-    // }
+    testRequest = () => {
+        console.log(route)
+        axios.get(`${route}test`)
+            .then((response) => {
+                console.log(response.data);
+                console.log(response.status);
+                console.log(response.statusText);
+                console.log(response.headers);
+                console.log(response.config);
+            });
+
+    }
 
     render() {
         return <div>
+            {this.props.state.user.displayName == "Mor Bargig" ?
+                <button onClick={this.testRequest}> test</button>
+                : null}
             <div>
                 <br></br>
                 <div>create a new broadcast list <br></br>
