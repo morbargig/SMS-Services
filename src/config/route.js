@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const route = async function () {
+const isItOnline = async function () {
     let url = 'http://localhost:3030/'
     await axios.get(`/isItOnline`)
         .then((response) => {
@@ -11,5 +11,6 @@ const route = async function () {
         });
     return url
 }
-
-export default route()
+if (typeof (isItOnline()) === 'string'){  const route = '/'}
+else { const route = 'http://localhost:3030/' }
+    export default route
