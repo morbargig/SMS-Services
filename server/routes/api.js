@@ -14,6 +14,10 @@ router.use(urlencoded({ extended: false }))
 
 
 // deleteUser
+router.get('/test', function (req, res) {
+    res.send("work")
+})
+
 
 router.get('/isItOnline', function (req, res) {
     res.send(process.env.PORT)
