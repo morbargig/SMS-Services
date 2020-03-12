@@ -1,7 +1,7 @@
 
 let port = 3030
 function isonline(port) {
-    var uri = `/isItOnline`
+    var uri = `http://localhost:${port}/isItOnline`
     var xhr = new XMLHttpRequest();
     xhr.open("GET", uri, true);
     xhr.send(null);
@@ -9,10 +9,10 @@ function isonline(port) {
     console.log(xhr.status, xhr.response)
     // console.log("3030" > 0)
     if (xhr.status == 200 && xhr.response == "server is online") {
-        return '/';
+        return `http://localhost:${port}/`;
     }
     else {
-        return `http://localhost:${port}/`;
+        return '/';
     }
 }
 
