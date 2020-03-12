@@ -50,7 +50,7 @@ class User extends Component {
             // console.log(userInfo)
             firebase.database().ref('users/sms_users/').on('value', (snap) => {
                 console.log(snap.val());
-                if (snap.val() === null || snap.val()[user.displayName + "-" + user.uid] === undefined || snap.val()[user.displayName + "-" + user.uid] === null || snap.val()[user.displayName + "-" + user.uid].number === undefined) {
+                if (snap.val() === null || snap.val()[user.displayName + "-" + user.uid] === undefined || snap.val()[user.displayName + "-" + user.uid] === null || snap.val()[user.displayName + "-" + user.uid].number === undefined || snap.val()[user.displayName + "-" + user.uid].number === 0) {
                     this.writeUserData(user)
                 }
             })
