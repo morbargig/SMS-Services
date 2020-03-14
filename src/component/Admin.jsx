@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import axios from 'axios'
 import route from '../config/route'
 import firebase from '../config/firebase'
-import { BroadcastList } from '../funcCmponent/BroadcastList';
-
+import { BroadcastList } from '../funcCmponent/BroadcastList'
+import readXlsxFile from 'read-excel-file'
 
 class Admin extends Component {
     constructor() {
@@ -27,18 +27,70 @@ class Admin extends Component {
         });
     }
 
-
-
-
-
     sendMassege = async (e) => {
-        let from = prompt("Please enter from who this massage");
+        let { displayName, uid } = this.props.state.user
+        let data
         let name = e.target.name
-        let to = "972528612379"
-        if (name === 'sendMassege') { to = 1 }
-        await axios.post(`${route}sendSms/${from}/${to}`, {
-            text: this.state.text
-        })
+        await firebase.database().ref('users/sms_users/').once('value').then(function (snap) {
+            if (snap.val() !== null) {
+                data = snap.val()[displayName + "-" + uid]
+            }
+        });
+        if (name === "test") {
+            if (data !== undefined && data !== null) {
+                console.log(data, data.lastTest)
+                if (data.lastTest !== new Date().toString().slice(0, 15)) {
+                    firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set({
+                        email: data.email,
+                        broadcastLists: data.broadcastLists ? data.broadcastLists : null,
+                        name: data.name,
+                        number: data.number,
+                        profile_picture: data.profile_picture,
+                        sms_number: data.sms_number,
+                        userId: data.userId,
+                        lastTest: new Date().toString().slice(0, 15),
+                    });
+                } else { alert("we sorry only one test allowed per day"); return }
+            }
+            let from = prompt("Please enter from who this message");
+            let to = "972" + data.number.toString()
+            // function to send one sms to here
+            await axios.post(`${route}sendSms/${from}/${to}`, {
+                text: this.state.text + "Remove cod:" + this.state.broadcastList + "-" + uid + "\nRemove link : http://bit.ly/2v5ZFFA"
+            })
+            alert("send massage from " + from + " to " + to)
+        } else {
+
+            let broadcastListName = this.state.broadcastList
+            let broadcastList
+            await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
+                if (snap.val() !== null) {
+                    broadcastList = snap.val()[broadcastListName + "-" + uid]
+                }
+            });
+            console.log(broadcastList)
+            console.log(data.sms_number, broadcastList.users.length)
+            if (broadcastList !== undefined && data.sms_number > broadcastList.users.length) {
+                alert("send " + broadcastList.users.length + " massages")
+                let from = prompt("Please enter from who this message");
+                for (let i of broadcastList.users) {
+                    let to = "972" + i[1].toString()
+                    await axios.post(`${route}sendSms/${from}/${to}`, {
+                        text: this.state.text + "Remove cod:" + this.state.broadcastList + "-" + uid + "\nRemove link : http://bit.ly/2v5ZFFA"
+                    })
+                }
+                firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set({
+                    email: data.email,
+                    broadcastLists: data.broadcastLists,
+                    name: data.name,
+                    number: data.number,
+                    profile_picture: data.profile_picture,
+                    sms_number: data.sms_number -= broadcastList.users.length,
+                    userId: data.userId,
+                    lastTest: data.lastTest ? data.lastTest : null,
+                });
+            } else { alert("we are sorry you dont have enough messages") }
+        }
     }
 
     showUsers = () => {
@@ -47,43 +99,53 @@ class Admin extends Component {
         }))
     }
 
-    addUsers = async (toAddOrToUpdate) => {
-        let users = this.state.listOfUsers.split("\n")
-        users = users.map(i => i.split(","))
-        let erorrNmbers = []
-        for (let i of users) {
-            // let u = i[1]
-            i[1] = i[1].replace("+", "").replace(/-/g, '').replace(" ", "")
-            // console.log(u)
-            if (i[1][0] === '+') { i[1] = i[1].slice(4, 13) }
-            i[1][0] + i[1][1] + i[1][2] === '972' ? i[1] = i[1].slice(3, 12) : i[1] = i[1].slice(1, 10)
-            // console.log(i[1].length, i[1])
-            if (i[1][0] === "5" && i[1].length === 9) {
-                i[1] = parseInt(i[1])
-                // console.log(i[1])
-            } else { i[1] = null; erorrNmbers.push(i) }
+    isValidnNumber = (number) => {
+        let i = number
+        if (i[1] > 500000000 && i[1] < 599999999) { i[1] = parseInt(i[1]); return i }
+        i[1] = i[1].replace("+", "").replace(/-/g, '').replace(" ", "")
+        i[1] = parseInt(i[1])
+        if ((i[1] > 500000000 && i[1] < 599999999) || (i[1] > 972500000000 && i[1] < 972599999999)) {
+            if (i[1] > 972500000000) {
+                i[1] = i[1] - 972000000000
+                return i
+            }
         }
-        users = users.filter(i => i[1] !== null)
-        // console.log(users)
-        if (erorrNmbers === []) {
-            alert(`that use problem with users ${erorrNmbers}
+        else { i[1] = null; return i }
+    }
+
+    addUsers = async (toAddOrToUpdate, listOfUsers = this.state.listOfUsers.split("\n").map(i => i.split(","))) => {
+        let oldUsers = listOfUsers
+        let erorrNmbers = []
+        let users = []
+        console.log(oldUsers)
+        for (let i = 0; i < oldUsers.length; i++) {
+            let u = oldUsers[i]
+            let res
+            // console.log(typeof(parseInt(u[0])) )
+            if (typeof (parseInt(u[0])) === 'number') {
+                res = this.isValidnNumber([u[1], u[0].toString()])
+            } else {
+                res = this.isValidnNumber(u)
+            }
+            if (res[1] === null) { erorrNmbers.push(u) } else { users.push(res); }
+        }
+        console.log(users)
+        if (erorrNmbers.length !== 0) {
+            alert(`there was problem with users ${erorrNmbers}
             \n saved ${users.length} users`)
         }
         let data
         let { uid } = this.props.state.user
         let broadcastList = this.state.broadcastList
         await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
-
             if (snap.val() !== null) {
                 data = snap.val()[broadcastList + "-" + uid]
             }
         });
 
 
-        // console.log(data)
-        if (data === undefined || !toAddOrToUpdate) {
-
-        } else {
+        console.log(users)
+        if (data !== undefined && toAddOrToUpdate) {
             let isAllreadyIn
             for (let u of users) {
                 isAllreadyIn = data.users.filter(i => i[1] === u[1])
@@ -97,11 +159,11 @@ class Admin extends Component {
             users = users.concat(data.users)
             // console.log(users)
         }
+        console.log(users)
         firebase.database().ref('users/sms_broadcast/' + broadcastList + "-" + uid).set({
             users: users
         });
         this.setState({ correnetUsers: users })
-
     }
 
     broadcastSearch = async (e) => {
@@ -144,7 +206,6 @@ class Admin extends Component {
             broadcasts = [this.state.newBroadcast]
         } else {
             let isAllreadyIn = data.broadcastLists.filter(i => i === this.state.newBroadcast)
-            // console.log(isAllreadyIn)
             if (isAllreadyIn.length > 0) {
                 alert(`this broadcast alredy in the database`)
                 return
@@ -160,8 +221,9 @@ class Admin extends Component {
             profile_picture: data.profile_picture ? data.profile_picture : data.photoURL,
             sms_number: data.sms_number ? data.sms_number : 0,
             userId: data.userId ? data.userId : data.uid,
+            lastTest: data.lastTest ? data.lastTest : null,
         });
-        this.setState({ broadcastLists: broadcasts })
+        this.setState({ broadcastLists: broadcasts, newBroadcast: undefined })
     }
 
     handleChange = (e) => {
@@ -219,9 +281,28 @@ class Admin extends Component {
 
     }
 
+    getFile = (filePath) => {
+        return filePath.substr(filePath.lastIndexOf('\\') + 1).split('.')[0];
+    }
+
+    handleFileChange = (e) => {
+        let file = e.target.files[0]
+        if (file === undefined) { return }
+        let fileName = file.name
+        let fileType = fileName.split('.')[1]
+        if (fileType !== "xlsx") { alert("xls only!"); this.setState({ xl: "" }); e.target.value = null; }
+        else {
+            readXlsxFile(file).then((rows) => {
+                console.log(rows)
+                let res = window.confirm("do you want to update your broadcast?\nyes to update\nno to regular add")
+                this.addUsers(res, rows)
+            })
+        }
+    }
+
     render() {
         return <div>
-            {this.props.state.user.displayName == "Mor Bargig" ?
+            {this.props.state.user.displayName === "Mor Bargig" ?
                 <button onClick={this.testRequest}> test</button>
                 : null}
             <div>
@@ -230,9 +311,9 @@ class Admin extends Component {
                     <input name="newBroadcast" onChange={this.handleChange} value={this.state.newBroadcast || ""} placeholder="type new broadcast name" ></input>
                     <button onClick={this.addNewBroadcast}> add new broadcast </button>
                 </div>
-                <h4> choese broadcast list to work on </h4>
+                <h4> choose broadcast list to work on </h4>
                 <select onChange={this.broadcastSearch} value={this.state.broadcastList}  >
-                    <option defaultValue="" id="defaultSelect" value="" key="jhgf"> choese broadcast list</option>
+                    <option defaultValue="" id="defaultSelect" key="jhgf"> choese broadcast list</option>
                     {this.state.broadcastLists ?
                         this.state.broadcastLists.map(i => <option value={i} key={i}>{i} </option>)
                         : null}
@@ -241,12 +322,11 @@ class Admin extends Component {
                     <BroadcastList state={this.state} This={this}  ></BroadcastList>
                     : null}
 
-
-                <input type="file"></input>
+                <h5>please enter a xl file</h5><input name="inputfile" type="file" value={this.state.xl || undefined} onChange={this.handleFileChange}></input><br></br>
 
 
                 <h4>new massage </h4>
-                <textarea placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.updateInput}>
+                <textarea placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.handleChange}>
                 </textarea>
                 <button name="test" onClick={this.sendMassege}>Test </button>
 

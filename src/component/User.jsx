@@ -83,7 +83,8 @@ class User extends Component {
             number: phoneNumber,
             profile_picture: photoURL,
             sms_number: 0,
-            userId: uid
+            userId: uid,
+            lastTest: null,
         });
         this.setState({ user: user, userLogin: true });
     }
