@@ -31,6 +31,7 @@ class Admin extends Component {
         let { displayName, uid } = this.props.state.user
         let data
         let name = e.target.name
+        let broadcastListName = this.state.broadcastList
         await firebase.database().ref('users/sms_users/').once('value').then(function (snap) {
             if (snap.val() !== null) {
                 data = snap.val()[displayName + "-" + uid]
@@ -53,15 +54,15 @@ class Admin extends Component {
                 } else { alert("we sorry only one test allowed per day"); return }
             }
             let from = prompt("Please enter from who this message");
-            let to = "972" + data.number.toString()
+            let to = ("972" + parseInt(data.number).toString()).toString()
             // function to send one sms to here
             await axios.post(`${route}sendSms/${from}/${to}`, {
-                text: this.state.text + "Remove cod:" + this.state.broadcastList + "-" + uid + "\nRemove link : http://bit.ly/2v5ZFFA"
+                text: this.state.text + "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA"
             })
             alert("send massage from " + from + " to " + to)
         } else {
 
-            let broadcastListName = this.state.broadcastList
+            
             let broadcastList
             await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
                 if (snap.val() !== null) {
@@ -74,9 +75,9 @@ class Admin extends Component {
                 alert("send " + broadcastList.users.length + " massages")
                 let from = prompt("Please enter from who this message");
                 for (let i of broadcastList.users) {
-                    let to = "972" + i[1].toString()
+                    let to = ("972" + parseInt(i[1]).toString()).toString()
                     await axios.post(`${route}sendSms/${from}/${to}`, {
-                        text: this.state.text + "Remove cod:" + this.state.broadcastList + "-" + uid + "\nRemove link : http://bit.ly/2v5ZFFA"
+                        text: this.state.text + "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA"
                     })
                 }
                 firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set({
