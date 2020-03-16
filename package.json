@@ -24,8 +24,8 @@
   },
   "scripts": {
     "start": "concurrently \"nodemon server.js --exec babel-node --presets babel-preset-env\"",
-    "dev": "concurrently \"set HTTPS=true&&react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" \"mongod\" ",
-    "herokuDev": "concurrently \"set HTTPS=true&&react-scripts start\" \"heroku local -p 3030\" \"mongod\"",
+    "dev": "concurrently \"set HTTPS=true&&react-scripts start\" \"nodemon server.js --exec babel-node --presets babel-preset-env\" ",
+    "herokuDev": "concurrently \"set HTTPS=true&&react-scripts start\" \"heroku local -p 3030\"",
     "noServerDev": "set HTTPS=true&&react-scripts start",
     "server": "node server",
     "build": "react-scripts build",

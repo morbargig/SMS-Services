@@ -14,11 +14,11 @@ class Remove extends Component {
     updateInput = (e) => {
         // let value = e.target.value
         let newValue = parseInt(e.target.value)
-        // console.log(typeof value)
-        // console.log(value)
-        if (typeof newValue === "number") {
+        if (!isNaN(newValue)) {
             this.setState({ numberInput: "0" + newValue })
         }
+        // console.log(typeof value)
+        // console.log(value)
 
     }
 
@@ -36,11 +36,16 @@ class Remove extends Component {
                 let deletedUser
                 data.users.map(i => i[1] === IntNumberInput ? deletedUser = i[0] : null)
                 data = data.users.filter(i => i[1] !== IntNumberInput)
-                alert(`Successfully deleted ${deletedUser}\n  המספר יוסר בהצלחה ${deletedUser}`)
-                firebase.database().ref('users/sms_broadcast/' + removeList).set({
-                    users: data
-                });
-            } else { alert("something want wrong\nnumber not found\nor broadcast list doesn't exists any more") }
+                if (deletedUser !== undefined) {
+                    alert(`The number of "${deletedUser}" Successfully deleted\n     המספר של "${deletedUser}" הוסר בהצלחה  `)
+                    firebase.database().ref('users/sms_broadcast/' + removeList).set({
+                        users: data
+                    });
+                } else {
+                    alert("number not found")
+                    // alert("something want wrong\nnumber not found\nor broadcast list doesn't exists any more")
+                }
+            } else { alert("broadcast list doesn't exists any more") }
         }
         else { alert("invalid number try agian || מספר לא חוקי נסה שוב") }
     }
