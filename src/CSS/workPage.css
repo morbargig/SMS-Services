@@ -84,6 +84,9 @@ label{
   input:focus ~ label, input:valid ~ label{
     top:-20px;
     font-size:14px;
+    
+    /* position: relative;
+    width: 100%; */
     color:#5264AE;
 }
 
@@ -108,9 +111,9 @@ label{
 }
 
 /* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
-  width:50%;
-}
+/* input:focus ~ .bar:before, input:focus ~ .bar:after {
+  width: 100%;
+} */
 
 /* HIGHLIGHTER ================================== */
 .highlight {
@@ -136,56 +139,18 @@ input:focus ~ .highlight {
 }
 
 .buttons {
-font-family: SansationLight;
-font-size: 14px;
-color: #fff;
-min-width: 160px;
-height: 30px;
-background-image: linear-gradient(#4C69BA, #3B55A0);
-border-radius: 8px;
-font-weight: bold;
-margin-bottom: 0px;
-margin-top: -10px;
+    font-family: SansationLight;
+    font-size: 14px;
+    color: #fff;
+    height: 30px;
+    background-image: linear-gradient(#4C69BA, #3B55A0);
+    border-radius: 8px;
+    font-weight: bold;
+    margin-bottom: 0px;
+    margin-top: -10px;
 
 }
 
-.buttons2 {
-    font-family: SansationLight;
-    font-size: 14px;
-    color: #fff;
-    padding: 1%;
-    background-image: linear-gradient(#4C69BA, #3B55A0);
-    border-radius: 8px;
-    font-weight: bold;
-    position: relative;
-  
-  }
-
-  .buttons3 {
-    font-family: SansationLight;
-    font-size: 14px;
-    color: #fff;
-    padding: 1%;
-    background-image: linear-gradient(#4C69BA, #3B55A0);
-    border-radius: 8px;
-    font-weight: bold;
-    position: relative;
-    }
-
-  .buttons4 {
-    font-family: SansationLight;
-    font-size: 14px;
-    color: #fff;
-    padding: 1%;
-    background-image: linear-gradient(#4C69BA, #3B55A0);
-    border-radius: 8px;
-    font-weight: bold;
-    position: relative;
-    left: 380px;
-    top: -33px;
-    
-    
-    }
 
 .welcome_div{
   position: relative;
@@ -262,6 +227,7 @@ font-weight: bold;
 }
 
 .textblock {
+    width: 100%;
   border: 2px solid #4C69BA;
   border-radius: 5px;
 }

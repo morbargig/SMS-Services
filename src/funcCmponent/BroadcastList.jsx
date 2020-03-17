@@ -10,14 +10,14 @@ export const BroadcastList = ({ This, state }) => {
             <div>
                 <h6> new user </h6>
                 <div className="group">
-                    <input name="name" type="text" value={name || ""} onChange={handleChange}  ></input>
+                    <input className="input" name="name" type="text" value={name || ""} onChange={handleChange}  ></input>
                     <span className="highlight"></span>
                     <span className="bar"></span>
                     <label>Name</label>
                 </div>
 
                 <div className="group">
-                    <input name="number" type="number" value={number || ""} onChange={handleChange}  ></input>
+                    <input className="input" name="number" type="number" value={number || ""} onChange={handleChange}  ></input>
                     <span className="highlight"></span>
                     <span className="bar"></span>
                     <label>Phone number</label>
@@ -37,13 +37,13 @@ export const BroadcastList = ({ This, state }) => {
 
                 </textarea>
                 <br></br><br></br>
-                <button className="buttons2" onClick={showUsers} >Show users </button>
+                <button className="buttons" onClick={showUsers} >Show users </button>
                 {listOfUsers ? <button name="addnewusers" onClick={() => addUsers(true)}>Add new users </button> : null}
                 {listOfUsers ? <button name="newUsersList" onClick={() => addUsers(false)}>update users </button> : null}
             </div>
 
             <h5>please enter a xl file</h5><input className="input" name="inputfile" type="file" value={xl || undefined} onChange={handleFileChange}></input><br></br>
-
+            <hr className="rounded"></hr>
         </div>
     )
 }

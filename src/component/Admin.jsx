@@ -194,7 +194,7 @@ class Admin extends Component {
         } else { this.setState({ broadcastList: broadcastList, correnetUsers: undefined }) }
     }
 
-    addNewBroadcast = async () => {
+    addNewBroadcast = async (isCallback = false) => {
         if (this.state.newBroadcast === "") { alert("invalid broadcast name"); return }
         let { displayName, uid } = this.props.state.user
         let data
@@ -203,8 +203,8 @@ class Admin extends Component {
         });
 
         let broadcasts
-        if (data === undefined || data.broadcastLists === undefined || null) {
-            data = this.props.state.user
+        if (data === undefined) { if (!isCallback) { this.addNewBroadcast(true) } return }
+        if (data.broadcastLists === undefined || null) {
             broadcasts = [this.state.newBroadcast]
         } else {
             let isAllreadyIn = data.broadcastLists.filter(i => i === this.state.newBroadcast)
@@ -219,7 +219,7 @@ class Admin extends Component {
             email: data.email,
             broadcastLists: broadcasts,
             name: data.name ? data.name : data.displayName,
-            number: data.number ? data.number : (data.phoneNumber ? data.phoneNumber : 0),
+            number: data.number ? data.number : (data.phoneNumber !== null ? data.phoneNumber : 0),
             profile_picture: data.profile_picture ? data.profile_picture : data.photoURL,
             sms_number: data.sms_number ? data.sms_number : 0,
             userId: data.userId ? data.userId : data.uid,
@@ -303,11 +303,10 @@ class Admin extends Component {
     }
 
     render() {
-        let rootStyle = document.getElementById("root").style 
-        // =    {background: "linear-gradient(45deg, #4267b2, #00e676, #6742bf, #dd286e, #efa03b)", min-height: "100vh";}
+        let rootStyle = document.getElementById("root").style
         rootStyle.background = "linear-gradient(45deg, #4267b2, #00e676, #6742bf, #dd286e, #efa03b)"
         rootStyle['min-height'] = "100vh"
-        rootStyle.width ="100%"
+        rootStyle.width = "100%"
         return <div className="main_form">
 
             <div className="welcome_div">
@@ -320,7 +319,7 @@ class Admin extends Component {
                 <br></br>
                 <h4>you are in boys Broadcast </h4>
                 <div className="group">
-                    <input className="input" name="newBroadcast"  onChange={this.handleChange} value={this.state.newBroadcast || ""}
+                    <input className="input" name="newBroadcast" onChange={this.handleChange} value={this.state.newBroadcast || ""}
                     // placeholder="type new broadcast name"
                     ></input>
                     <span className="highlight"></span>
@@ -342,13 +341,13 @@ class Admin extends Component {
 
 
 
-            <h4>new massage </h4>
+            <h4>new message </h4>
             <textarea className="textblock2" placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.handleChange}>
             </textarea>
-            <button className="buttons2" name="test" onClick={this.sendMassege}>Test </button>
+            <button className="buttons" name="test" onClick={this.sendMassege}>Test </button>
 
             {this.state.broadcastList ?
-                <button className="buttons3" name='sendMassege' onClick={this.sendMassege}> send to all users</button>
+                <button className="buttons" name='sendMassege' onClick={this.sendMassege}> send to all users</button>
                 : null}
         </div>
     }
