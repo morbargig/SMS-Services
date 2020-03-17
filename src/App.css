@@ -1,9 +1,9 @@
 .App {
   text-align: center;
 }
-#root{
+/* #root{
   padding : 20px;
-}
+} */
 .App-logo {
   height: 40vmin;
 }
@@ -25,3 +25,5 @@
 .App-link {
   color: #09d3ac;
 }
+
+

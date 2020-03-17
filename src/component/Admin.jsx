@@ -5,6 +5,7 @@ import route from '../config/route'
 import firebase from '../config/firebase'
 import { BroadcastList } from '../funcCmponent/BroadcastList'
 import readXlsxFile from 'read-excel-file'
+import '../CSS/workPage.css'
 
 class Admin extends Component {
     constructor() {
@@ -62,7 +63,7 @@ class Admin extends Component {
             alert("send massage from " + from + " to " + to)
         } else {
 
-            
+
             let broadcastList
             await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
                 if (snap.val() !== null) {
@@ -302,39 +303,53 @@ class Admin extends Component {
     }
 
     render() {
-        return <div>
-            {this.props.state.user.displayName === "Mor Bargig" ?
-                <button onClick={this.testRequest}> test</button>
-                : null}
+        let rootStyle = document.getElementById("root").style 
+        // =    {background: "linear-gradient(45deg, #4267b2, #00e676, #6742bf, #dd286e, #efa03b)", min-height: "100vh";}
+        rootStyle.background = "linear-gradient(45deg, #4267b2, #00e676, #6742bf, #dd286e, #efa03b)"
+        rootStyle['min-height'] = "100vh"
+        rootStyle.width ="100%"
+        return <div className="main_form">
+
+            <div className="welcome_div">
+                Welcome {this.props.state.user.displayName} <button className="log_out_btn" onClick={() => firebase.auth().signOut()}> log out</button>
+                {/* {this.props.state.user.displayName === "Mor Bargig" ?
+                    <button className="test_btn" onClick={this.testRequest}> test</button>
+                    : null} */}
+            </div>
             <div>
                 <br></br>
-                <div>create a new broadcast list <br></br>
-                    <input name="newBroadcast" onChange={this.handleChange} value={this.state.newBroadcast || ""} placeholder="type new broadcast name" ></input>
-                    <button onClick={this.addNewBroadcast}> add new broadcast </button>
+                <h4>you are in boys Broadcast </h4>
+                <div className="group">
+                    <input className="input" name="newBroadcast"  onChange={this.handleChange} value={this.state.newBroadcast || ""}
+                    // placeholder="type new broadcast name"
+                    ></input>
+                    <span className="highlight"></span>
+                    <span className="bar"></span>
+                    <label>type new broadcast name</label>
+                    <button className="buttons" onClick={this.addNewBroadcast}> add new broadcast </button>
                 </div>
-                <h4> choose broadcast list to work on </h4>
-                <select onChange={this.broadcastSearch} value={this.state.broadcastList}  >
-                    <option defaultValue="" id="defaultSelect" key="jhgf"> choese broadcast list</option>
-                    {this.state.broadcastLists ?
-                        this.state.broadcastLists.map(i => <option value={i} key={i}>{i} </option>)
-                        : null}
-                </select>
-                {this.state.broadcastList ?
-                    <BroadcastList state={this.state} This={this}  ></BroadcastList>
-                    : null}
-
-                <h5>please enter a xl file</h5><input name="inputfile" type="file" value={this.state.xl || undefined} onChange={this.handleFileChange}></input><br></br>
-
-
-                <h4>new massage </h4>
-                <textarea placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.handleChange}>
-                </textarea>
-                <button name="test" onClick={this.sendMassege}>Test </button>
-
-                {this.state.broadcastList ?
-                    <button name='sendMassege' onClick={this.sendMassege}> send to all users</button>
-                    : null}
             </div>
+            <h4> choose broadcast list to work on </h4>
+            <select className="sel_option" onChange={this.broadcastSearch} value={this.state.broadcastList}  >
+                <option defaultValue="" id="defaultSelect" key="jhgf"> choese broadcast list</option>
+                {this.state.broadcastLists ?
+                    this.state.broadcastLists.map(i => <option value={i} key={i}>{i} </option>)
+                    : null}
+            </select>
+            {this.state.broadcastList ?
+                <BroadcastList state={this.state} This={this}  ></BroadcastList>
+                : null}
+
+
+
+            <h4>new massage </h4>
+            <textarea className="textblock2" placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.handleChange}>
+            </textarea>
+            <button className="buttons2" name="test" onClick={this.sendMassege}>Test </button>
+
+            {this.state.broadcastList ?
+                <button className="buttons3" name='sendMassege' onClick={this.sendMassege}> send to all users</button>
+                : null}
         </div>
     }
 }

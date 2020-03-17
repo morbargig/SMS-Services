@@ -4,8 +4,10 @@ import React, { Component } from 'react';
 // import route from '../config/route'
 import firebase from '../config/firebase'
 import Admin from './Admin';
+import { Login } from './Login';
 
-class User extends Component {
+
+class Home extends Component {
     state = {
         userLogin: false
     }
@@ -92,19 +94,20 @@ class User extends Component {
 
 
     render() {
+        let rootStyle = document.getElementById("root").style 
+        // =    {background: "linear-gradient(45deg, #4267b2, #00e676, #6742bf, #dd286e, #efa03b)", min-height: "100vh";}
+        rootStyle.paddingTop = "5%"
+        rootStyle.background = "linear-gradient(45deg, #4267b2, #00e676, #6742bf, #dd286e, #efa03b)"
+        rootStyle['min-height'] = "100vh"
         return <div>
 
             {this.state.userLogin ?
-                <div>
-                    Welcome {this.state.user.displayName} <button onClick={() => firebase.auth().signOut()}> log out</button>
-                    <Admin state={this.state} />
-                </div>
-                : <div>
-                    <button onClick={this.FacebookLogin}> Facebook Login</button>
-                </div>}
+                <Admin state={this.state} />
+                : <Login FacebookLogin={this.FacebookLogin} />
+            }
         </div>
     }
 
 }
 
-export default User;
+export default Home;

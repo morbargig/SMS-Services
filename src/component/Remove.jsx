@@ -90,7 +90,7 @@ class Remove extends Component {
     }
 
     render() {
-        return <div data-role="page" data-url="/rm/rrHvx" tabIndex="0" className="removePage">
+        return <div  data-role="page" data-url="/rm/rrHvx" tabIndex="0" className="removePage">
             {!this.state.virefyBroadcastList ?
                 <div>
                     <h5> קוד הסרה </h5>
@@ -106,7 +106,7 @@ class Remove extends Component {
                         <div className="page-header text-center">
                         </div>
                         <div className="control-group" id="div_phone">
-                            <label htmlFor="username" className="control-label">  הכנס מספר טלפון לאימות:<br></br>  (מספרים בלבד!)</label>
+                            <label htmlFor="username" className="control-label">  הכנס מספר טלפון לאימות:<br></br>  (!מספרים בלבד)</label>
                             <div className="ui-input-text ui-shadow-inset ui-corner-all ui-btn-shadow ui-body-c"><input value={this.state.numberInput} onChange={this.updateInput} type="tel" pattern="\d*" className="numbers-only ui-input-text ui-body-c" maxLength="10" name="phone" autoComplete="off" id="phone" ></input> </div>
                         </div>
                         <div

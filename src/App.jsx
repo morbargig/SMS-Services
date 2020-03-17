@@ -2,7 +2,8 @@ import './App.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import React, { Component } from 'react';
 import Remove from './component/Remove'
-import User from './component/User';
+import Home from './component/Home';
+
 
 class App extends Component {
 
@@ -10,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <Route path="/" exact render={() => <User />} />
+        <Route path="/" exact render={() => <Home />} />
         <Route path="/remove/" exact render={() => <Remove state={this.state} />} />
       </Router >
     );
