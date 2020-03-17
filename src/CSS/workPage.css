@@ -153,7 +153,12 @@ input:focus ~ .highlight {
 
 
 .welcome_div{
+  float: right;
+  display: table-cell;
+  vertical-align: middle;
   position: relative;
+  margin: auto;
+  margin-top: 5%;
 }
 
 .log_out_btn:hover {

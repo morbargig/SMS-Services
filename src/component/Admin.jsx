@@ -310,7 +310,10 @@ class Admin extends Component {
         return <div className="main_form">
 
             <div className="welcome_div">
-                Welcome {this.props.state.user.displayName} <button className="log_out_btn" onClick={() => firebase.auth().signOut()}> log out</button>
+                {console.log(this.props.state.user.photoURL)}
+                 <img alt="" style={{ borderRadius: "50%" }} src={this.props.state.user.photoURL} />  
+                Welcome {this.props.state.user.displayName} 
+                 <button className="log_out_btn" onClick={() => firebase.auth().signOut()}> log out</button>
                 {/* {this.props.state.user.displayName === "Mor Bargig" ?
                     <button className="test_btn" onClick={this.testRequest}> test</button>
                     : null} */}
