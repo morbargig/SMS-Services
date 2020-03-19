@@ -28,71 +28,71 @@ class Admin extends Component {
         });
     }
 
-    sendMassege = async (e) => {
+    sendTextMassege = async () => {
         let { displayName, uid } = this.props.state.user
         let data
-        let name = e.target.name
         let broadcastListName = this.state.broadcastList
         await firebase.database().ref('users/sms_users/').once('value').then(function (snap) {
             if (snap.val() !== null) {
                 data = snap.val()[displayName + "-" + uid]
             }
         });
-        if (name === "test") {
-            if (data !== undefined && data !== null) {
-                console.log(data, data.lastTest)
-                if (data.lastTest !== new Date().toString().slice(0, 15)) {
-                    firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set({
-                        email: data.email,
-                        broadcastLists: data.broadcastLists ? data.broadcastLists : null,
-                        name: data.name,
-                        number: data.number,
-                        profile_picture: data.profile_picture,
-                        sms_number: data.sms_number,
-                        userId: data.userId,
-                        lastTest: new Date().toString().slice(0, 15),
-                    });
-                } else { alert("we sorry only one test allowed per day"); return }
-            }
-            let from = prompt("Please enter from who this message");
-            let to = ("972" + parseInt(data.number).toString()).toString()
-            // function to send one sms to here
-            await axios.post(`${route}sendSms/${from}/${to}`, {
-                text: this.state.text + "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA"
-            })
-            alert("send massage from " + from + " to " + to)
-        } else {
-
-
-            let broadcastList
-            await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
-                if (snap.val() !== null) {
-                    broadcastList = snap.val()[broadcastListName + "-" + uid]
-                }
-            });
-            console.log(broadcastList)
-            console.log(data.sms_number, broadcastList.users.length)
-            if (broadcastList !== undefined && data.sms_number > broadcastList.users.length) {
-                alert("send " + broadcastList.users.length + " massages")
-                let from = prompt("Please enter from who this message");
-                for (let i of broadcastList.users) {
-                    let to = ("972" + parseInt(i[1]).toString()).toString()
-                    await axios.post(`${route}sendSms/${from}/${to}`, {
-                        text: this.state.text + "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA"
-                    })
-                }
-                firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set({
-                    email: data.email,
-                    broadcastLists: data.broadcastLists,
-                    name: data.name,
-                    number: data.number,
-                    profile_picture: data.profile_picture,
-                    sms_number: data.sms_number -= broadcastList.users.length,
-                    userId: data.userId,
-                    lastTest: data.lastTest ? data.lastTest : null,
-                });
-            } else { alert("we are sorry you dont have enough messages") }
+        if (data !== undefined && data !== null) {
+            console.log(data, data.lastTest)
+            if (data.lastTest !== new Date().toString().slice(0, 15)) {
+                data.lastTest = new Date().toString().slice(0, 15)
+                firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set(data);
+            } else { alert("we sorry only one test allowed per day"); return }
         }
+        let from = prompt("Please enter who this message from\nlimit to 9 digit");
+        if (from === null) { from = prompt("Please enter who this message from"); if (from === null) { from = "oYo sms" } }
+        console.log(from)
+        let to = ("972" + parseInt(data.number).toString()).toString()
+        let text = this.state.text
+        text = text.replace("%שם%", displayName)
+        let removeIink = window.confirm("do you want to add a remove link to the bottum of the message ?")
+        if (removeIink) { text += "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA" }
+        // await axios.post(`${route}sendSms/${from}/${to}`, {
+        //     text: text
+        // })
+        alert("send this massage \n" + text + "\n\nfrom " + from + " to " + to)
+    }
+
+    sendMassege = async () => {
+        let { displayName, uid } = this.props.state.user
+        let data
+        let broadcastListName = this.state.broadcastList
+        await firebase.database().ref('users/sms_users/').once('value').then(function (snap) {
+            if (snap.val() !== null) {
+                data = snap.val()[displayName + "-" + uid]
+            }
+        });
+        let broadcastList
+        await firebase.database().ref('users/sms_broadcast/').once('value').then(function (snap) {
+            if (snap.val() !== null) {
+                broadcastList = snap.val()[broadcastListName + "-" + uid]
+            }
+        });
+        console.log(broadcastList)
+        console.log(data.sms_number, broadcastList.users.length)
+        if (broadcastList !== undefined && data.sms_number > broadcastList.users.length) {
+            let from = prompt("Please enter who this message from\nlimit to 9 digit");
+            if (from === null) { from = prompt("Please enter who this message from"); if (from === null) { from = "oYo sms" } }
+            let text = this.state.text
+            let removeIink = window.confirm("do you want to add a remove link to the bottum of the message ?")
+            if (removeIink) { text += "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA" }
+            let defaultName = prompt("if you was the %שם% function please enter a defult name")
+            for (let i of broadcastList.users) {
+                let to = ("972" + parseInt(i[1]).toString()).toString()
+                if (i[0] !== null) { text = text.replace("%שם%", i[0]) } else if (defaultName !== null) { text = text.replace("%שם%", defaultName) }
+                await axios.post(`${route}sendSms/${from}/${to}`, {
+                    text: text
+                })
+            }
+            alert("send this massage \n" + text + "\n\nfrom " + from + " to " + broadcastList.users.length + " pepole")
+            data.sms_number -= broadcastList.users.length
+            firebase.database().ref('users/sms_users/' + displayName + "-" + uid).set(data);
+        } else { alert("we are sorry you dont have enough messages") }
     }
 
     showUsers = () => {
@@ -311,9 +311,9 @@ class Admin extends Component {
 
             <div className="welcome_div">
                 {console.log(this.props.state.user.photoURL)}
-                 <img alt="" style={{ borderRadius: "50%" }} src={this.props.state.user.photoURL} />  
-                Welcome {this.props.state.user.displayName} 
-                 <button className="log_out_btn" onClick={() => firebase.auth().signOut()}> log out</button>
+                <img alt="" style={{ borderRadius: "50%" }} src={this.props.state.user.photoURL} />
+                Welcome {this.props.state.user.displayName}
+                <button className="log_out_btn" onClick={() => firebase.auth().signOut()}> log out</button>
                 {/* {this.props.state.user.displayName === "Mor Bargig" ?
                     <button className="test_btn" onClick={this.testRequest}> test</button>
                     : null} */}
@@ -347,7 +347,7 @@ class Admin extends Component {
             <h4>new message </h4>
             <textarea className="textblock2" placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.handleChange}>
             </textarea>
-            <button className="buttons" name="test" onClick={this.sendMassege}>Test </button>
+            <button className="buttons" name="test" onClick={this.sendTextMassege}>Test </button>
 
             {this.state.broadcastList ?
                 <button className="buttons" name='sendMassege' onClick={this.sendMassege}> send to all users</button>

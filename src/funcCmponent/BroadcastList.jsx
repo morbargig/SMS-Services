@@ -30,7 +30,7 @@ export const BroadcastList = ({ This, state }) => {
                 {correnetUsers && isShowUsers ? <div> {correnetUsers.map(n => <li key={n[1]}> <b>{n[0]}</b> {' ,0' + n[1]}  </li>)}   </div> : null}
                 {listOfUsers ? <h4> to use "add new users" and "update users"
                 you need to wirte you users like
-         <br></br>  name , phoneNumber   <br></br>
+         <br></br>  phoneNumber , name     <br></br>
             and separate by new line
         </h4> : null}
                 <textarea className="textblock" placeholder={correnetUsers ? correnetUsers.length + ' users: \n' + correnetUsers.map(n => n[0] + '-0' + n[1] + "  ") : "users"} name='listOfUsers' value={listOfUsers} rows="4" cols="60" onChange={handleChange}>
