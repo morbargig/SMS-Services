@@ -1,9 +1,10 @@
 
 
 import Nexmo from 'nexmo';
+// const Nexmo = require('nexmo'); 
 const nexmo = new Nexmo({
-    apiKey: '34d361c8',
-    apiSecret: 'Hdhhdhd3777',
+    apiKey: '3121be19',
+    apiSecret: 'Huaem8M9RJpHW6X7',
 });
 
 const opts = {
@@ -12,6 +13,7 @@ const opts = {
 };
 
 const sendMassege = function (from, to, text) {
+    console.log(from, to, text)
     nexmo.message.sendSms(from, to, text, opts, (err, responseData) => {
         if (err) {
             console.log(err);
@@ -25,5 +27,7 @@ const sendMassege = function (from, to, text) {
     })
 }
 
+
 export default sendMassege
+
 

@@ -28,7 +28,7 @@ class Admin extends Component {
         });
     }
 
-    sendTextMassege = async () => {
+    sendTestMassege = async () => {
         let { displayName, uid } = this.props.state.user
         let data
         let broadcastListName = this.state.broadcastList
@@ -52,9 +52,9 @@ class Admin extends Component {
         text = text.replace("%שם%", displayName)
         let removeIink = window.confirm("do you want to add a remove link to the bottum of the message ?")
         if (removeIink) { text += "\nRemove cod:\n" + broadcastListName + "-" + uid + "\nRemove link:\n http://bit.ly/2v5ZFFA" }
-        // await axios.post(`${route}sendSms/${from}/${to}`, {
-        //     text: text
-        // })
+        await axios.post(`${route}sendSms/${from}/${to}`, {
+            text: text
+        })
         alert("send this massage \n" + text + "\n\nfrom " + from + " to " + to)
     }
 
@@ -347,7 +347,7 @@ class Admin extends Component {
             <h4>new message </h4>
             <textarea className="textblock2" placeholder="text" name='text' value={this.state.text} rows="4" cols="50" onChange={this.handleChange}>
             </textarea>
-            <button className="buttons" name="test" onClick={this.sendTextMassege}>Test </button>
+            <button className="buttons" name="test" onClick={this.sendTestMassege}>Test </button>
 
             {this.state.broadcastList ?
                 <button className="buttons" name='sendMassege' onClick={this.sendMassege}> send to all users</button>
