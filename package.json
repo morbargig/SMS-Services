@@ -31,7 +31,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "gitPush": "git add .&&git commit -m \"automatic commit\"&&git push heroku master"
+    "gitPush": "git add .&&git commit -m \"automatic commit\"&&git push heroku master",
+    "echo" : "echo $? $# $1"
   },
   "eslintConfig": {
     "extends": "react-app"
