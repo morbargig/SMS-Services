@@ -27,7 +27,6 @@ const sendMassege = function (from, to, text) {
     })
 }
 
-
 export default sendMassege
 
 
