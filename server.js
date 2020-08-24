@@ -9,10 +9,9 @@ import path from 'path'
     const app = express()
     const PORT = process.env.PORT || 3030
 
-    // const DBname = "SMS-Services"
-
+    // if i want to use mongodb database but i used firebase
+    // const DBname = "SMS-Services
     // const MONGO_URL = process.env.MONGODB_URI || `mongodb://localhost/${DBname}`
-
     // const connection = await mongoose
     //     .connect(MONGO_URL, {
     //         useUnifiedTopology: true,
